@@ -42,6 +42,8 @@ freRel=[]
 freAcum=[]
 efeEquis=[]
 cuadrado=[]
+listaxf=[]
+listavarianza=[]
 #print("el intervalo de clases es: " + str(iC) + " y k: " + str(k))
 
 for i in range(k):
@@ -85,10 +87,20 @@ for i in range(k):
 for i in range(k):
     cuadrado.append(puntoMedio[i]*puntoMedio[i])
 
+for i in range(k):
+    listaxf.append(puntoMedio[i]*frecuencia[i])
+
 
 temporal = pd.DataFrame({'Intervalo': inter, 'Frecuencia' : frecuencia, 'Punto medio' : puntoMedio,
-                         'Frecuencia relativa' : freRel, 'Frecuencia Acumulada' : freAcum,
+                         'Fr r' : freRel, 'Fr A' : freAcum,
                          'X*F' : efeEquis, 'X cuadrada' : cuadrado})
+
+mediax=sum(listaxf)/len(xd)
+
+for i in range(k):
+    listavarianza.append((puntoMedio[i]-mediax)*(puntoMedio[i]-mediax)*frecuencia[i])
+
+desviacion=math.sqrt(sum(listavarianza)/len(xd))
 
 print(temporal)
 for i in efeEquis:
@@ -100,15 +112,21 @@ indice=frecuencia.index(max(frecuencia))
 mediana = listNums[indice][0]+(((len(xd))/(2)-freAcum[indice-1])/(frecuencia[indice]))*(listNums[indice][-2]-listNums[indice][0])
 
 moda1 =listNums[indice][0]
-print(moda1)
+
 moda2 =((frecuencia[indice]-frecuencia[indice-1])/((frecuencia[indice]-frecuencia[indice-1])+(frecuencia[indice]-frecuencia[indice+1])))
-print(moda2)
+
 moda3 =(listNums[indice][-2]-listNums[indice][0])
-print(moda3)
+
 
 moda =moda1+moda2*moda3
 
-print("LI: "+ str(listNums[indice][0]))
+
 print("La media es:     " + str(media) + " La mediana es: " + str(mediana) +
-      " La moda es : " + str(moda))
+      " La moda es : " + str(moda) + " la desviación estandar es: " + str(desviacion) )
+if media>moda:
+    print("El sesgo es Positivo")
+elif media == moda and media == mediana:
+    print("El sesgo es Simetrico")
+elif media < moda:
+    print("El sesgo es Negativo")
 input()
